@@ -36,12 +36,16 @@ const Navbar = () => {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              <User className="mr-2 h-4 w-4" />
-              Sign In
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/auth">
+                <User className="mr-2 h-4 w-4" />
+                Sign In
+              </Link>
             </Button>
-            <Button variant="hero" size="sm">
-              Get Started
+            <Button variant="hero" size="sm" asChild>
+              <Link to="/auth">
+                Get Started
+              </Link>
             </Button>
           </div>
 
@@ -86,12 +90,16 @@ const Navbar = () => {
                 Blog
               </Link>
               <div className="pt-4 pb-2 space-y-2">
-                <Button variant="ghost" className="w-full justify-start">
-                  <User className="mr-2 h-4 w-4" />
-                  Sign In
+                <Button variant="ghost" className="w-full justify-start" asChild>
+                  <Link to="/auth">
+                    <User className="mr-2 h-4 w-4" />
+                    Sign In
+                  </Link>
                 </Button>
-                <Button variant="hero" className="w-full">
-                  Get Started
+                <Button variant="hero" className="w-full" asChild>
+                  <Link to="/auth">
+                    Get Started
+                  </Link>
                 </Button>
               </div>
             </div>
