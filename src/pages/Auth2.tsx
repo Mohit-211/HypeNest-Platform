@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Mail, Lock, Eye, EyeOff, Building2, User } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -20,28 +20,19 @@ import { useToast } from "@/hooks/use-toast";
 
 const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
-
-  // Sign in
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [signinEmail, setSigninEmail] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
-
-  // Sign up
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
   const [signupFirstName, setSignupFirstName] = useState("");
   const [signupLastName, setSignupLastName] = useState("");
-  const [signupRole, setSignupRole] = useState<"creator" | "brand">("creator");
-  const [brandName, setBrandName] = useState("");
-
   const [isLoading, setIsLoading] = useState(false);
 
   const { login, signup } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // ----------------------
-  // Handlers
-  // ----------------------
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!signinEmail || !signinPassword) {
@@ -55,17 +46,17 @@ const Auth = () => {
 
     setIsLoading(true);
     try {
-      const { role } = await login(signinEmail, signinPassword);
-      toast({ title: "Success", description: "Signed in successfully!" });
-
-      // Redirect based on role
-      if (role === "brand") navigate("/brand/dashboard");
-      else if (role === "creator") navigate("/creator/dashboard");
-      else navigate("/"); // fallback (admin or unknown)
-    } catch (err: any) {
+      await login(signinEmail, signinPassword);
+      toast({
+        title: "Success",
+        description: "Signed in successfully!",
+      });
+      // Navigation handled by AuthContext redirect based on role
+    } catch (error) {
       toast({
         title: "Error",
-        description: err?.message || "Invalid credentials.",
+        description:
+          "Invalid credentials. Try: brand@example.com or creator@example.com",
         variant: "destructive",
       });
     } finally {
@@ -75,7 +66,6 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (
       !signupEmail ||
       !signupPassword ||
@@ -84,16 +74,7 @@ const Auth = () => {
     ) {
       toast({
         title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (signupRole === "brand" && !brandName.trim()) {
-      toast({
-        title: "Brand name required",
-        description: "Please add your brand/company name",
+        description: "Please fill in all fields",
         variant: "destructive",
       });
       return;
@@ -101,26 +82,21 @@ const Auth = () => {
 
     setIsLoading(true);
     try {
-      const fullName = `${signupFirstName} ${signupLastName}`.trim();
-
-      const res = await signup(
+      // Default new signups to creator role
+      await signup(
         signupEmail,
         signupPassword,
-        signupRole,
-        fullName,
-        { brandName: signupRole === "brand" ? brandName.trim() : undefined }
+        "creator",
+        `${signupFirstName} ${signupLastName}`
       );
-
       toast({
-        title: "Account created",
-        description: "We’ve sent you an OTP on email. Verify to continue.",
+        title: "Success",
+        description: "Account created successfully!",
       });
-
-      navigate(`/verify-otp?email=${encodeURIComponent(res.email)}`);
-    } catch (err: any) {
+    } catch (error) {
       toast({
         title: "Error",
-        description: err?.message || "Failed to create account",
+        description: "Failed to create account",
         variant: "destructive",
       });
     } finally {
@@ -128,9 +104,6 @@ const Auth = () => {
     }
   };
 
-  // ----------------------
-  // UI
-  // ----------------------
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -152,7 +125,7 @@ const Auth = () => {
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
 
-            {/* Sign In */}
+            {/* Sign In Tab */}
             <TabsContent value="signin">
               <Card>
                 <CardHeader>
@@ -170,12 +143,11 @@ const Auth = () => {
                         <Input
                           id="signin-email"
                           type="email"
-                          placeholder="you@company.com"
+                          placeholder="Try: brand@example.com or creator@example.com"
                           className="pl-10"
                           value={signinEmail}
                           onChange={(e) => setSigninEmail(e.target.value)}
                           disabled={isLoading}
-                          autoComplete="email"
                         />
                       </div>
                     </div>
@@ -187,20 +159,16 @@ const Auth = () => {
                         <Input
                           id="signin-password"
                           type={showPassword ? "text" : "password"}
-                          placeholder="Enter your password"
+                          placeholder="Any password works"
                           className="pl-10 pr-10"
                           value={signinPassword}
                           onChange={(e) => setSigninPassword(e.target.value)}
                           disabled={isLoading}
-                          autoComplete="current-password"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
                           className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
-                          aria-label={
-                            showPassword ? "Hide password" : "Show password"
-                          }
                         >
                           {showPassword ? (
                             <EyeOff className="h-4 w-4" />
@@ -247,16 +215,8 @@ const Auth = () => {
                     </div>
                   </div>
 
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    disabled={isLoading}
-                  >
-                    <svg
-                      className="mr-2 h-4 w-4"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
+                  <Button variant="outline" className="w-full">
+                    <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                       <path
                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                         fill="#4285F4"
@@ -280,7 +240,7 @@ const Auth = () => {
               </Card>
             </TabsContent>
 
-            {/* Sign Up */}
+            {/* Sign Up Tab */}
             <TabsContent value="signup">
               <Card>
                 <CardHeader>
@@ -294,18 +254,13 @@ const Auth = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="firstName">First Name</Label>
-                        <div className="relative">
-                          <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            id="firstName"
-                            placeholder="John"
-                            className="pl-10"
-                            value={signupFirstName}
-                            onChange={(e) => setSignupFirstName(e.target.value)}
-                            disabled={isLoading}
-                            autoComplete="given-name"
-                          />
-                        </div>
+                        <Input
+                          id="firstName"
+                          placeholder="John"
+                          value={signupFirstName}
+                          onChange={(e) => setSignupFirstName(e.target.value)}
+                          disabled={isLoading}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="lastName">Last Name</Label>
@@ -315,64 +270,9 @@ const Auth = () => {
                           value={signupLastName}
                           onChange={(e) => setSignupLastName(e.target.value)}
                           disabled={isLoading}
-                          autoComplete="family-name"
                         />
                       </div>
                     </div>
-
-                    {/* Role selection */}
-                    <div className="space-y-2">
-                      <Label>Register As</Label>
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setSignupRole("creator")}
-                          className={`border rounded-md p-3 text-sm text-left transition ${
-                            signupRole === "creator"
-                              ? "border-primary ring-2 ring-primary/30"
-                              : "hover:bg-muted"
-                          }`}
-                        >
-                          <div className="font-medium">Creator</div>
-                          <div className="text-muted-foreground text-xs">
-                            UGC / Influencer
-                          </div>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSignupRole("brand")}
-                          className={`border rounded-md p-3 text-sm text-left transition ${
-                            signupRole === "brand"
-                              ? "border-primary ring-2 ring-primary/30"
-                              : "hover:bg-muted"
-                          }`}
-                        >
-                          <div className="font-medium">Brand</div>
-                          <div className="text-muted-foreground text-xs">
-                            Marketer / Company
-                          </div>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Brand name (only when role = brand) */}
-                    {signupRole === "brand" && (
-                      <div className="space-y-2">
-                        <Label htmlFor="brandName">Brand / Company Name</Label>
-                        <div className="relative">
-                          <Building2 className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            id="brandName"
-                            placeholder="Acme Co."
-                            className="pl-10"
-                            value={brandName}
-                            onChange={(e) => setBrandName(e.target.value)}
-                            disabled={isLoading}
-                            autoComplete="organization"
-                          />
-                        </div>
-                      </div>
-                    )}
 
                     <div className="space-y-2">
                       <Label htmlFor="signup-email">Email</Label>
@@ -381,12 +281,11 @@ const Auth = () => {
                         <Input
                           id="signup-email"
                           type="email"
-                          placeholder="you@company.com"
+                          placeholder="Enter your email"
                           className="pl-10"
                           value={signupEmail}
                           onChange={(e) => setSignupEmail(e.target.value)}
                           disabled={isLoading}
-                          autoComplete="email"
                         />
                       </div>
                     </div>
@@ -403,15 +302,11 @@ const Auth = () => {
                           value={signupPassword}
                           onChange={(e) => setSignupPassword(e.target.value)}
                           disabled={isLoading}
-                          autoComplete="new-password"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
                           className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
-                          aria-label={
-                            showPassword ? "Hide password" : "Show password"
-                          }
                         >
                           {showPassword ? (
                             <EyeOff className="h-4 w-4" />
@@ -463,16 +358,8 @@ const Auth = () => {
                     </div>
                   </div>
 
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    disabled={isLoading}
-                  >
-                    <svg
-                      className="mr-2 h-4 w-4"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
+                  <Button variant="outline" className="w-full">
+                    <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                       <path
                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                         fill="#4285F4"
@@ -494,7 +381,7 @@ const Auth = () => {
                   </Button>
 
                   <p className="text-center text-sm text-muted-foreground">
-                    We’ll send an OTP to your email for verification.
+                    After signing up, you'll choose your role (Brand or Creator)
                   </p>
                 </CardContent>
               </Card>
