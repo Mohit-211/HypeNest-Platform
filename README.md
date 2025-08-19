@@ -1,73 +1,101 @@
-# Welcome to your Lovable project
+Hypenest Media – Creator Marketplace
 
-## Project info
+Hypenest Media is a modern creator marketplace that connects brands with influencers and creators for UGC campaigns, paid collaborations, and authentic partnerships.
 
-**URL**: https://lovable.dev/projects/44485c13-e12e-4caa-9e57-46d1bdb4d583
+Built with speed, scalability, and collaboration in mind.
 
-## How can I edit this code?
+🌐 Live Project
 
-There are several ways of editing your application.
+https://hypenestmedia.com
 
-**Use Lovable**
+🚀 Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/44485c13-e12e-4caa-9e57-46d1bdb4d583) and start prompting.
+Creator Discovery – Browse and filter vetted creators.
 
-Changes made via Lovable will be committed automatically to this repo.
+Brand Dashboard – Launch, manage, and track campaigns.
 
-**Use your preferred IDE**
+Creator Dashboard – Manage profile, collaborations, and earnings.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Secure Authentication – Brand/Creator sign-up & login flows.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Responsive Design – Optimized for web and mobile.
 
-Follow these steps:
+Fast Frontend – Built with Vite + React for lightning-fast performance.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+🛠️ Tech Stack
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Frontend: React (TypeScript), Vite, shadcn/ui, Tailwind CSS
 
-# Step 3: Install the necessary dependencies.
-npm i
+Backend: (planned) Node.js / Express with MySQL
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Deployment: Nginx on Ubuntu, Certbot SSL
+
+Version Control: GitHub + CI/CD pipelines
+
+Design System: shadcn-ui components + Tailwind
+
+📦 Getting Started
+Prerequisites
+
+Node.js (use nvm)
+
+npm or yarn
+
+Installation
+
+# Clone repository
+
+git clone <YOUR_REPO_URL>
+
+cd hypenest-frontend
+
+# Install dependencies
+
+npm install
+
+# Run development server
+
 npm run dev
-```
 
-**Edit a file directly in GitHub**
+The app will be available at http://localhost:5173.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Build for Production
+npm run build
 
-**Use GitHub Codespaces**
+Build files are generated in /dist. Deploy with Nginx or any static hosting service.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+🌍 Deployment
 
-## What technologies are used for this project?
+We use Ubuntu + Nginx for production.
+Steps:
 
-This project is built with:
+Build with npm run build.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Copy /dist to /var/www/hypenestplatform/hypenest-frontend/dist.
 
-## How can I deploy this project?
+Point Nginx config to that directory.
 
-Simply open [Lovable](https://lovable.dev/projects/44485c13-e12e-4caa-9e57-46d1bdb4d583) and click on Share -> Publish.
+Reload Nginx and ensure SSL via Certbot.
 
-## Can I connect a custom domain to my Lovable project?
+📖 Project Structure
+hypenest-frontend/
+├── public/ # Static assets (favicon, OG images, etc.)
+├── src/ # React components, hooks, and logic
+├── index.html # Entry point with SEO & branding
+├── tailwind.config.js
+└── package.json
 
-Yes, you can!
+👥 Contributing
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Contributions are welcome! Please fork the repo and submit PRs for new features, bug fixes, or improvements.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+📜 License
+
+This project is licensed under the MIT License – feel free to use and adapt.
+
+✨ About Hypenest Media
+
+Hypenest Media is on a mission to make influencer marketing accessible, transparent, and results-driven.
+We help brands grow faster by connecting them with the right creators.
+
+🔥 Ready to grow your brand? Visit hypenestmedia.com.
