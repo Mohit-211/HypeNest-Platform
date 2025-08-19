@@ -390,7 +390,7 @@ const CreatorDashboard = () => {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-sm">Response Time</span>
-                        <span className="font-semibold">< 2 hours</span>
+                        <span className="font-semibold">&lt; 2 hours</span>
                       </div>
                     </div>
                   </CardContent>

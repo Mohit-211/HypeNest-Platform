@@ -202,17 +202,15 @@ const JoinAsCreator = () => {
                                 <div className="grid grid-cols-2 gap-2 flex-1">
                                   <div>
                                     <Label className="text-xs">Username</Label>
-                                    <Input 
+                                     <Input 
                                       placeholder="@username" 
-                                      size="sm"
                                       onClick={(e) => e.stopPropagation()}
                                     />
                                   </div>
                                   <div>
                                     <Label className="text-xs">Followers</Label>
-                                    <Input 
+                                     <Input 
                                       placeholder="e.g., 10000" 
-                                      size="sm"
                                       onClick={(e) => e.stopPropagation()}
                                     />
                                   </div>
