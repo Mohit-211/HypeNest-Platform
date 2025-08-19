@@ -65,12 +65,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     const foundUser = mockUsers.find(u => u.email === email);
     if (!foundUser) {
+      setIsLoading(false);
       throw new Error('Invalid credentials');
     }
     
     setUser(foundUser);
     localStorage.setItem('hypenest_user', JSON.stringify(foundUser));
     setIsLoading(false);
+    
+    // Redirect based on role
+    if (typeof window !== 'undefined') {
+      const redirectPath = foundUser.role === 'brand' ? '/brand/dashboard' : '/creator/dashboard';
+      window.location.href = redirectPath;
+    }
   };
 
   const signup = async (email: string, password: string, role: UserRole, name: string) => {
@@ -91,6 +98,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(newUser);
     localStorage.setItem('hypenest_user', JSON.stringify(newUser));
     setIsLoading(false);
+    
+    // Redirect based on role
+    if (typeof window !== 'undefined') {
+      const redirectPath = newUser.role === 'brand' ? '/brand/dashboard' : '/creator/dashboard';
+      window.location.href = redirectPath;
+    }
   };
 
   const logout = () => {
