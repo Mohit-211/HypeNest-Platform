@@ -20,6 +20,7 @@ import BrandDashboard from "./pages/brand/BrandDashboard";
 import BrandCampaigns from "./pages/brand/BrandCampaigns";
 import BrandMessages from "./pages/brand/BrandMessages";
 import CreatorDashboard from "./pages/CreatorDashboard";
+import VerifyOtp from "@/pages/VerifyOtp";
 
 const queryClient = new QueryClient();
 
@@ -41,40 +42,74 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/join-brand" element={<JoinAsBrand />} />
             <Route path="/join-creator" element={<JoinAsCreator />} />
-            
+            <Route path="/verify-otp" element={<VerifyOtp />} />
+
             {/* Protected Brand Routes */}
-            <Route path="/brand/*" element={
-              <ProtectedRoute allowedRoles={['brand']}>
-                <AppLayout>
-                  <Routes>
-                    <Route path="dashboard" element={<BrandDashboard />} />
-                    <Route path="campaigns" element={<BrandCampaigns />} />
-                    <Route path="messages" element={<BrandMessages />} />
-                    <Route path="billing" element={<div>Brand Billing (Coming Soon)</div>} />
-                    <Route path="settings" element={<div>Brand Settings (Coming Soon)</div>} />
-                    <Route index element={<Navigate to="/brand/dashboard" replace />} />
-                  </Routes>
-                </AppLayout>
-              </ProtectedRoute>
-            } />
-            
+            <Route
+              path="/brand/*"
+              element={
+                <ProtectedRoute allowedRoles={["brand"]}>
+                  <AppLayout>
+                    <Routes>
+                      <Route path="dashboard" element={<BrandDashboard />} />
+                      <Route path="campaigns" element={<BrandCampaigns />} />
+                      <Route path="messages" element={<BrandMessages />} />
+                      <Route
+                        path="billing"
+                        element={<div>Brand Billing (Coming Soon)</div>}
+                      />
+                      <Route
+                        path="settings"
+                        element={<div>Brand Settings (Coming Soon)</div>}
+                      />
+                      <Route
+                        index
+                        element={<Navigate to="/brand/dashboard" replace />}
+                      />
+                    </Routes>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+
             {/* Protected Creator Routes */}
-            <Route path="/creator/*" element={
-              <ProtectedRoute allowedRoles={['creator']}>
-                <AppLayout>
-                  <Routes>
-                    <Route path="dashboard" element={<CreatorDashboard />} />
-                    <Route path="leads" element={<div>Creator Leads (Coming Soon)</div>} />
-                    <Route path="bookings" element={<div>Creator Bookings (Coming Soon)</div>} />
-                    <Route path="payouts" element={<div>Creator Payouts (Coming Soon)</div>} />
-                    <Route path="portfolio" element={<div>Creator Portfolio (Coming Soon)</div>} />
-                    <Route path="settings" element={<div>Creator Settings (Coming Soon)</div>} />
-                    <Route index element={<Navigate to="/creator/dashboard" replace />} />
-                  </Routes>
-                </AppLayout>
-              </ProtectedRoute>
-            } />
-            
+            <Route
+              path="/creator/*"
+              element={
+                <ProtectedRoute allowedRoles={["creator"]}>
+                  <AppLayout>
+                    <Routes>
+                      <Route path="dashboard" element={<CreatorDashboard />} />
+                      <Route
+                        path="leads"
+                        element={<div>Creator Leads (Coming Soon)</div>}
+                      />
+                      <Route
+                        path="bookings"
+                        element={<div>Creator Bookings (Coming Soon)</div>}
+                      />
+                      <Route
+                        path="payouts"
+                        element={<div>Creator Payouts (Coming Soon)</div>}
+                      />
+                      <Route
+                        path="portfolio"
+                        element={<div>Creator Portfolio (Coming Soon)</div>}
+                      />
+                      <Route
+                        path="settings"
+                        element={<div>Creator Settings (Coming Soon)</div>}
+                      />
+                      <Route
+                        index
+                        element={<Navigate to="/creator/dashboard" replace />}
+                      />
+                    </Routes>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
